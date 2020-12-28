@@ -1,16 +1,169 @@
 1) PROT
+
+def prot(rna):
+    RNA_PRO = {"UUU": "F", "UUC": "F", "UUA": "L", "UUG": "L",
+               "UCU": "S", "UCC": "S", "UCA": "S", "UCG": "S",
+               "UAU": "Y", "UAC": "Y", "UAA": "STOP", "UAG": "STOP",
+               "UGU": "C", "UGC": "C", "UGA": "STOP", "UGG": "W",
+               "CUU": "L", "CUC": "L", "CUA": "L", "CUG": "L",
+               "CCU": "P", "CCC": "P", "CCA": "P", "CCG": "P",
+               "CAU": "H", "CAC": "H", "CAA": "Q", "CAG": "Q",
+               "CGU": "R", "CGC": "R", "CGA": "R", "CGG": "R",
+               "AUU": "I", "AUC": "I", "AUA": "I", "AUG": "M",
+               "ACU": "T", "ACC": "T", "ACA": "T", "ACG": "T",
+               "AAU": "N", "AAC": "N", "AAA": "K", "AAG": "K",
+               "AGU": "S", "AGC": "S", "AGA": "R", "AGG": "R",
+               "GUU": "V", "GUC": "V", "GUA": "V", "GUG": "V",
+               "GCU": "A", "GCC": "A", "GCA": "A", "GCG": "A",
+               "GAU": "D", "GAC": "D", "GAA": "E", "GAG": "E",
+               "GGU": "G", "GGC": "G", "GGA": "G", "GGG": "G" }
+    rna_lst = (re.findall('...', rna))
+    start = int(rna_lst.index('AUG'))
+    stop = False
+    protein = ''
+    if start != -1:
+        for p in range((start), len(rna_lst)):
+                if p == 'UAG' or p == 'UAA' or p == 'UGA':
+                    return protein.replace('STOP', '')
+                else:
+                    protein += (RNA_PRO.get(rna_lst[p]))
+
+        return protein.replace('STOP', '')
+    else:
+        return protein.replace('STOP', '')
+        
+rna = open('rosalind_prot.txt', 'r')
+line = rna.readlines()
+print(translate(line[0]))
+
 2) SPLC
+
+def splc(coding, exons):
+    code = str(coding)
+    exons = list(exons)
+    for k in exons:
+            code = code.replace(k, '')
+    rna_coding = RNA(code)
+    prot_coding = prot(rna_coding)
+    return prot_coding
+
+input_formated = fasta('rosalind_splc.txt', 'results.txt')
+dna_just = []
+coding = input_formated[0][1]
+for x in range(1, len(input_formated)):
+    dna_just.insert(x, input_formated[x][1])
+print(splc(coding, dna_just))
+
 3) TRAN
+
+def tran(first, second):
+    transit = 0
+    transv = 0
+    for x in range(len(first)):
+        a, b = first[x], second[x]
+        if a != b:
+            if (a == 'G' and b == 'A') or (a == 'A' and b == 'G') or (a == 'C' and b == 'T') or (a == 'T' and b == 'C'):#Transition
+                transit += 1
+            else:
+                transv += 1
+    print(transit/transv)
+
+input_formated = fasta('rosalind_tran.txt', 'results.txt')
+tran(input_formated[0][1], input_formated[1][1])
+
 4) HAMM
+
+def hamm(one, two):
+    counter = 0
+    for x in range(len(one)):
+        if one[x] != two[x]:
+            counter += 1
+    return counter
+data = open('rosalind_hamm.txt', 'r')
+line = data.readlines()
+one = line[0]
+two = line[1]
+print(hamm(one, two))
+
 5) TREE
+
+def tree():
+    input = open('rosalind_tree.txt', 'r').readlines()
+    n = int(input[0])
+    k = len(input[1:])
+    print(n-(k+1))
+tree()
+
 6) PDST
+
+def p_dist(a,b):
+    diff = 0
+    for x in range(len(a)):
+        if a[x] != b[x]:
+            diff += 1
+    return "%0.5f" % (diff/len(a))
+
+def pdst(dna):
+    for x in range(len(dna)):
+        for y in range(len(dna)):
+            dist = p_dist(dna[x], dna[y])
+            print(dist, end=' ')
+        print('')
+
+input_formated = fasta('rosalind_pdst.txt', 'results.txt')
+dna_just = []
+for x in range(0, len(input_formated)):
+    dna_just.insert(x, input_formated[x][1])
+pdst(dna_just)
+
+
 7) SSEQ
 8) LCSQ
 9) ORF
 10) PERM
+
+def perm(n):
+    num = '12345678'
+    k = num[:n]
+    p = list(itertools.permutations(k, n))
+    print(len(p))
+    for x in p:
+        print(' '.join(x))
+        
+  
 11) GRPH
+
+def grph(keys, items):
+    for p in range(len(items)):
+        ends_with = items[p][-3:]
+        for k in items:
+            if k.startswith(ends_with) and (keys[p] != ext[items.index(k)]):
+                print(keys[p], ext[items.index(k)])
+
+input_formated = fasta('rosalind_grph.txt', 'results.txt')
+dna_just = []
+ext = []
+for x in range(len(input_formated)):
+    dna_just.insert(x, input_formated[x][1])
+    ext.insert(x, input_formated[x][0])
+grph(ext, dna_just)
+
 12) INOD
 13) EDIT
 14) EDTA
 15) GLOB
 16) MULT
+
+***17) IPBR
+
+def iprb(k, m, n):
+    population = (['AA'] * k) + (['Aa'] * m) + (['aa'] * n)
+    all_children = []
+    for parent1 in population:
+        chosen = population[:]
+        chosen.remove(parent1)
+        for parent2 in chosen:
+            children = itertools.product(parent1, parent2)
+            all_children.extend([''.join(c) for c in children])
+    dominants = filter(lambda c: 'A' in c, all_children)
+    print (float(len(list(dominants))) / len(all_children))
