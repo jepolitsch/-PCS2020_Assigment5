@@ -116,7 +116,6 @@ for x in range(0, len(input_formated)):
     dna_just.insert(x, input_formated[x][1])
 pdst(dna_just)
 
-
 7) SSEQ
 8) LCSQ
 9) ORF
@@ -130,7 +129,6 @@ def perm(n):
     for x in p:
         print(' '.join(x))
         
-  
 11) GRPH
 
 def grph(keys, items):
