@@ -252,9 +252,28 @@ def inod(n):
     
 13) EDIT
 
+def edit(s,t):
+    if len(s) == 0:
+        return len(t)
+    if len(t) == 0:
+        return len(s)
+    if s[len(s) - 1] == t[len(t) - 1]:
+        return edit(s[:-1], t[:-1])
+    else:
+        return 1 + min(edit(s, t[:-1]), edit(s[:-1], t), edit(s[:-1], t[:-1]))
+
+input_formated = fasta('rosalind_edit.txt', 'results.txt')
+s = [input_formated[0][1]]
+t = [input_formated[1][1]]
+print(edit(s[0], t[0]))
 
 14) EDTA
+
+
+
 15) GLOB
+
+
 16) MULT
 
 ***17) IPBR
